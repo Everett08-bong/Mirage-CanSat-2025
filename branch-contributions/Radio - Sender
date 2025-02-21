@@ -1,0 +1,40 @@
+//including libraries
+#include <SPI.h>
+#include <LoRa.h>
+
+//define pin layout of LoRa
+const int LORA_CS = 17; //radio chip select
+const int LORA_RST = 16; //radio chip reset
+const int LORA_IRQ = 19; //interrupt pin
+
+byte msgCount = 0;
+
+void setup() {
+    Serial.begin(9600);
+    while (!Serial);
+
+    Serial.println("Starting LoRa...");
+
+    // Initialize LoRa with the specified pins
+    LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
+
+    if (!LoRa.begin(915E6)) {  // Set frequency to 915 MHz for North America
+        Serial.println("LoRa initialization failed!");
+        while (1);
+    }
+    Serial.println("LoRa initialization successful!");
+}
+
+void loop() {
+    Serial.println("Sending LoRa packet...");
+    Serial.println(msgCount);
+
+    //send packet
+    LoRa.beginPacket();
+    LoRa.print("Hello from Challenger RP2040!");
+    LoRa.print("Packet: ");
+    LoRa.print(msgCount);
+    LoRa.endPacket();
+
+    delay(5000);
+}
