@@ -36,12 +36,15 @@ byte msgCount = 0;
 void setup() {
     Serial.begin(9600);
     while (!Serial);
+    Serial.println("Initilizing CANSAT");
 
     // === OLED INIT ===
+    Serial.println("Before OLED");
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         Serial.println("SSD1306 OLED failed!");
         while (1);
     }
+        Serial.println("After OLED");
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
@@ -182,6 +185,7 @@ void loop() {
     }
     delay(interval);
 }
+
 
 }
 
