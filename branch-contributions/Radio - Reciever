@@ -27,10 +27,14 @@ void setup() {
     LoRa.setSPI(SPI1);
     LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
 
-    if (!LoRa.begin(915E6)) {  // Set frequency to 915 MHz for North America
+    if (!LoRa.begin(919E6)) {  // Set frequency to 915 MHz for North America
         Serial.println("LoRa initialization failed!");
         while (1);
     }
+
+    LoRa.setSpreadingFactor(9);      // Match both sides
+    // LoRa.setSignalBandwidth(125E3); // Optional, only if custom value is used
+
     Serial.println("LoRa Receiver Initialized!");
 }
 
