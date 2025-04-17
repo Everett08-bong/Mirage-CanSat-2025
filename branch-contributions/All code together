@@ -75,6 +75,8 @@ void setup() {
     display.display();
     delay(500);
 
+    LoRa.setSpreadingFactor(9); 
+
     // === BME680 INIT ===
     display.println("Starting BME680: ...");
     display.display();
@@ -185,7 +187,3 @@ void loop() {
     }
     delay(interval);
 }
-
-
-}
-
