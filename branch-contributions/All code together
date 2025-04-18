@@ -44,7 +44,7 @@ void setup() {
         Serial.println("SSD1306 OLED failed!");
         while (1);
     }
-        Serial.println("After OLED");
+    Serial.println("After OLED");
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
@@ -65,7 +65,7 @@ void setup() {
     LoRa.setSPI(SPI1);
     LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
 
-    if (!LoRa.begin(915E6)) { 
+    if (!LoRa.begin(919E6)) { 
         display.println("LoRa Failed!");
         display.display();
         while (1);
@@ -74,8 +74,6 @@ void setup() {
     display.println("LoRa Intialized");
     display.display();
     delay(500);
-
-    LoRa.setSpreadingFactor(9); 
 
     // === BME680 INIT ===
     display.println("Starting BME680: ...");
