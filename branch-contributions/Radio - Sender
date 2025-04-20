@@ -27,7 +27,7 @@ void setup() {
   LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
 
   // Initialize LoRa
-  if (!LoRa.begin(915E6)) {         // 915 MHz frequency
+  if (!LoRa.begin(919E6)) {         // 915 MHz frequency
     Serial.println("Starting LoRa failed!");
     while (1);  // Stay here if LoRa initialization fails
   }
