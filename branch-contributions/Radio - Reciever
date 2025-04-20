@@ -1,56 +1,53 @@
-// Including libraries
 #include <SPI.h>
 #include <LoRa.h>
 
-// Define pin layout of LoRa
-const int LORA_CS = 9;    // NSS (Chip Select)
-const int LORA_RST = 13;  // Reset
-const int LORA_IRQ = 14;  // Interrupt (DIO0)
+#define LORA_CS    9   // Chip Select pin
+#define LORA_RST   13  // Reset pin
+#define LORA_IRQ   14   // Interrupt pin (optional)
 
-// Manually define SPI1 pins
-#define LORA_SCK 10
-#define LORA_MISO 12
-#define LORA_MOSI 11
+#define LORA_SCK   10  // SPI1 Clock pin (SCK)
+#define LORA_MISO  12  // SPI1 MISO pin (Data In)
+#define LORA_MOSI  11  // SPI1 MOSI pin (Data Out)
+
 
 void setup() {
-    Serial.begin(9600);
-    while (!Serial);
+  Serial.begin(9600);
+  while (!Serial);
 
-    Serial.println("Starting LoRa Receiver...");
+  Serial.println("Setting Up LoRa Sender...");
 
-    // Manually set SPI1 pins
-    SPI1.setSCK(LORA_SCK);
-    SPI1.setTX(LORA_MOSI);
-    SPI1.setRX(LORA_MISO);
+  // Manually set SPI1 pins
+  SPI1.setSCK(LORA_SCK);
+  SPI1.setTX(LORA_MOSI);
+  SPI1.setRX(LORA_MISO);
 
-    // Use SPI1
-    LoRa.setSPI(SPI1);
-    LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
+  // Set the LoRa module's SPI to SPI1
+  LoRa.setSPI(SPI1);
+  // Configure the correct pins
+  LoRa.setPins(LORA_CS, LORA_RST, LORA_IRQ);
 
-    if (!LoRa.begin(919E6)) {  // Set frequency to 915 MHz for North America
-        Serial.println("LoRa initialization failed!");
-        while (1);
-    }
+  if (!LoRa.begin(915E6)) {
+    Serial.println("Starting LoRa failed!");
+    while (1);
+  }
 
-    LoRa.setSpreadingFactor(9);      // Match both sides
-    // LoRa.setSignalBandwidth(125E3); // Optional, only if custom value is used
-
-    Serial.println("LoRa Receiver Initialized!");
+  Serial.println("LoRa Reciever Initialized");
 }
 
 void loop() {
-    // Check if a LoRa packet is available
-    int packetSize = LoRa.parsePacket();
-    if (packetSize) {
-        Serial.println("Received packet:");
+  // try to parse packet
+  int packetSize = LoRa.parsePacket();
+  if (packetSize) {
+    // received a packet
+    Serial.print("Received packet '");
 
-        // Read packet data
-        while (LoRa.available()) {
-            Serial.print((char)LoRa.read());  // Print each received character
-        }
-
-        // Print RSSI (signal strength)
-        Serial.print("\nRSSI: ");
-        Serial.println(LoRa.packetRssi());
+    // read packet
+    while (LoRa.available()) {
+      Serial.print((char)LoRa.read());
     }
+
+    // print RSSI of packet
+    Serial.print("' with RSSI ");
+    Serial.println(LoRa.packetRssi());
+  }
 }
