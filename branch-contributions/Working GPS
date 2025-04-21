@@ -1,0 +1,47 @@
+#include <Wire.h>
+#include <Adafruit_GPS.h>
+
+Adafruit_GPS GPS(&Wire);  // using I2C
+uint32_t timer = millis();
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+  Serial.println("Starting GPS over I2C...");
+  if (!GPS.begin(0x10)) {
+    Serial.println("GPS not responding at 0x10");
+    while (1);
+  }
+
+  Serial.println("GPS connected!");
+
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  delay(100);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
+  delay(100);
+  GPS.sendCommand(PGCMD_ANTENNA);
+  delay(100);
+}
+
+void loop() {
+  GPS.read();
+
+  if (GPS.newNMEAreceived()) {
+    char *sentence = GPS.lastNMEA();
+    Serial.println(sentence); // Raw NMEA data
+
+    if (!GPS.parse(sentence)) return;
+  }
+
+  if (millis() - timer > 2000) {
+    timer = millis();
+
+    Serial.print("Fix: "); Serial.println((int)GPS.fix);
+    Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+    Serial.print("Lat: "); Serial.println(GPS.latitude, 4);
+    Serial.print("Lon: "); Serial.println(GPS.longitude, 4);
+    Serial.print("Alt: "); Serial.print(GPS.altitude); Serial.println(" m");
+    Serial.println("---------------------");
+  }
+}
