@@ -1,0 +1,9 @@
+Arduino IDE Links
+
+Go Arduino IDE > Settings > Insert Link
+
+Challenger Lora Links:
+- https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+
+ESP32 Cam Links:
+- https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
