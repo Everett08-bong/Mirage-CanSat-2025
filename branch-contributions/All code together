@@ -13,6 +13,10 @@ const int LORA_IRQ = 14;
 #define LORA_MISO 12
 #define LORA_MOSI 11
 
+//=== Nichrome Shit ===//
+#define NICHROME_PIN 8  // use D6 or whatever pin you wired LED to
+bool nichromeFired = false;
+
 // === Sensor Instances ===//
 Adafruit_BME680 bme;
 Adafruit_GPS GPS(&Wire); // GPS over I2C
@@ -69,6 +73,10 @@ void setup() {
   delay(100);
   Serial.println("GPS initialized!");
 
+  //===nichrome pin INIT===//
+  pinMode(NICHROME_PIN, OUTPUT);
+  digitalWrite(NICHROME_PIN, LOW);
+
   delay(2000);
 }
 
@@ -101,6 +109,15 @@ void loop() {
     float lat = GPS.latitude;
     float lon = GPS.longitude;
     float gpsAlt = GPS.altitude;
+
+    // === NICHROME LOGIC ===
+    if (!nichromeFired && humidity >= 28) {
+      Serial.println("Triggering Nichrome (LED)...");
+      digitalWrite(NICHROME_PIN, HIGH);
+      delay(10000);  // keep it on for 10 seconds
+      digitalWrite(NICHROME_PIN, LOW);
+      nichromeFired = true; // prevent retriggering
+    }
 
     //Format string
     String payload = "T:" + String(temperature, 2) + ", ";
