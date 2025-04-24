@@ -25,7 +25,7 @@ byte msgCount = 0;
 
 void setup() {
   Serial.begin(115200);
-
+  while(!Serial);
   Serial.println("Initializing CANSAT...");
 
   // === LORA INIT ===
@@ -110,7 +110,10 @@ void loop() {
     payload += "Sat:" + String(sats) + ", ";
     payload += "Lat:" + String(lat, 4) + ", ";
     payload += "Lon:" + String(lon, 4) + ", ";
-    payload += "Alt:" + String(gpsAlt, 1);
+    payload += "Alt:" + String(gpsAlt, 1) + ", ";
+    
+    unsigned long uptime = millis() / 1000;
+    payload += "Upt:" + String(uptime);
 
     // Serial print
     Serial.println("------ Telemetry ------");
