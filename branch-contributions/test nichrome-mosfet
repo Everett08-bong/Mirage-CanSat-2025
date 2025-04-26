@@ -1,0 +1,14 @@
+#define NICHROME_PIN 8
+
+
+void setup() {
+  pinMode(NICHROME_PIN, OUTPUT);
+  digitalWrite(NICHROME_PIN, LOW);
+}
+
+void loop() {
+  digitalWrite(NICHROME_PIN, HIGH); // Turn ON
+  delay(5000);                      // Wait 5 sec
+  digitalWrite(NICHROME_PIN, LOW);   // Turn OFF
+  while (true);                      // Stop program
+}
